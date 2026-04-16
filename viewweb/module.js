@@ -945,12 +945,13 @@ async function refreshDatabaseModule() {
     }
     dbState.loadedKey = key;
     dbState.error = "";
-    dbState.lastUpdatedAt = new Date().toISOString();
+    dbState.lastUpdatedAt = getLatestDataUpdatedAt(dbState.summary);
   } catch (error) {
     dbState.error = error.message;
     dbState.summary = [];
     dbState.meters = [];
     dbState.auditLogs = [];
+    dbState.lastUpdatedAt = "";
   } finally {
     dbState.loading = false;
     renderModulePage();
@@ -3642,6 +3643,22 @@ function getDataUpdatedAtText(fallback) {
     return "待更新";
   }
   return formatLocalDateTime(dbState.lastUpdatedAt);
+}
+
+function getLatestDataUpdatedAt(rows) {
+  let latest = "";
+  rows.forEach((row) => {
+    const value = row.latest_data_updated_at || row.latest_reading_time || "";
+    if (!value) {
+      return;
+    }
+    const time = new Date(value).getTime();
+    const latestTime = latest ? new Date(latest).getTime() : 0;
+    if (!Number.isNaN(time) && time > latestTime) {
+      latest = value;
+    }
+  });
+  return latest;
 }
 
 function formatLocalDateTime(value) {

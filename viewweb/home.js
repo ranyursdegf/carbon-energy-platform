@@ -128,11 +128,12 @@ function renderHero() {
   }
 
   const overview = dashboardState.overview;
+  const dataUpdatedAt = getOverviewUpdatedAt(overview);
   dom.heroTags.innerHTML = [
     createTag(`区域 ${formatNumber(getNumber(overview, "area_count"), 0)} 个`),
     createTag(`累计用电 ${formatNumber(getNumber(overview, "total_kwh"), 1)} kWh`),
     createTag(`累计碳排 ${formatNumber(getNumber(overview, "total_carbon_tons"), 3)} t`),
-    createTag(`最新 ${formatDateTime(overview && overview.latest_reading_time)}`)
+    createTag(`最新 ${formatDateTime(dataUpdatedAt)}`)
   ].join("");
 }
 
@@ -165,8 +166,8 @@ function renderGlobalControls() {
     </label>
     <div class="control-static">
       <span>数据更新时间</span>
-      <strong>${formatDateTime(dashboardState.overview && dashboardState.overview.latest_reading_time)}</strong>
-      <p>按最新电耗记录同步</p>
+      <strong>${formatDateTime(getOverviewUpdatedAt(dashboardState.overview))}</strong>
+      <p>按最新添加记录同步</p>
     </div>
   `;
 
@@ -234,11 +235,12 @@ function renderOverviewStats() {
   }
 
   const overview = dashboardState.overview;
+  const dataUpdatedAt = getOverviewUpdatedAt(overview);
   const stats = [
     { label: "区域数量", value: `${formatNumber(getNumber(overview, "area_count"), 0)} 个`, note: "启用统计区域", danger: false },
     { label: "累计用电量", value: `${formatNumber(getNumber(overview, "total_kwh"), 1)} kWh`, note: "累计电耗记录", danger: false },
     { label: "累计碳排放", value: `${formatNumber(getNumber(overview, "total_carbon_tons"), 3)} t CO₂e`, note: "按区域排放因子折算", danger: false },
-    { label: "最新数据时间", value: formatDateTime(overview && overview.latest_reading_time), note: "按最新记录同步", danger: false }
+    { label: "最新数据时间", value: formatDateTime(dataUpdatedAt), note: "按最新添加记录同步", danger: false }
   ];
 
   dom.overviewStats.innerHTML = stats.map((item) => `
@@ -290,6 +292,10 @@ function getNumber(source, key) {
     return 0;
   }
   return Number(source[key]) || 0;
+}
+
+function getOverviewUpdatedAt(overview) {
+  return overview && (overview.latest_data_updated_at || overview.latest_reading_time);
 }
 
 function formatNumber(value, digits = 0) {

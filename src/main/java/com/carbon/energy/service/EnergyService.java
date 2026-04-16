@@ -104,7 +104,9 @@ public class EnergyService {
           et.unit,
           SUM(r.amount) AS total_amount,
           SUM(r.amount * COALESCE(ef.factor_value, et.default_emission_factor, 0)) / 1000 AS total_carbon_tons,
-          COUNT(*) AS reading_count
+          COUNT(*) AS reading_count,
+          MAX(r.reading_time) AS latest_reading_time,
+          MAX(COALESCE(r.updated_at, r.created_at)) AS latest_data_updated_at
         FROM energy_readings r
         JOIN energy_types et ON et.id = r.energy_type_id
         LEFT JOIN emission_factors ef
@@ -354,7 +356,9 @@ public class EnergyService {
           et.unit,
           SUM(r.amount) AS total_amount,
           SUM(r.amount * COALESCE(ef.factor_value, et.default_emission_factor, 0)) / 1000 AS total_carbon_tons,
-          COUNT(*) AS reading_count
+          COUNT(*) AS reading_count,
+          MAX(r.reading_time) AS latest_reading_time,
+          MAX(COALESCE(r.updated_at, r.created_at)) AS latest_data_updated_at
         FROM energy_readings r
         JOIN areas a ON a.id = r.area_id
         JOIN energy_types et ON et.id = r.energy_type_id

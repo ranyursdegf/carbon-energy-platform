@@ -37,7 +37,8 @@ public class DashboardService {
           COUNT(DISTINCT a.id) AS area_count,
           COALESCE(SUM(r.kwh), 0) AS total_kwh,
           COALESCE(SUM(r.kwh * a.grid_emission_factor) / 1000, 0) AS total_carbon_tons,
-          MAX(r.reading_time) AS latest_reading_time
+          MAX(r.reading_time) AS latest_reading_time,
+          MAX(COALESCE(r.updated_at, r.created_at)) AS latest_data_updated_at
         FROM areas a
         LEFT JOIN electricity_readings r ON r.area_id = a.id
         WHERE %s
