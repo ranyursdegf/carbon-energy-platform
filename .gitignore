@@ -1,6 +1,7 @@
 target/
 .env
 *.log
+*.zip
 tools/downloads/
 tools/jdk17/
 tools/.m2/
