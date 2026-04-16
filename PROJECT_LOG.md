@@ -350,10 +350,12 @@
 - `verify-project.ps1` 增加审计日志接口冒烟测试，覆盖有 token 成功和无 token 返回 401。
 - `README.md` 补充审计日志接口说明。
 - 清理根目录历史 `.log` 文件，并通过 VS Code 工作区设置隐藏 `target/` 和 `*.log`，减少左侧文件树干扰。
+- 初始化本地 Git 仓库，补强 `.gitignore`，已排除 `.env`、`target/`、日志、便携 JDK、下载压缩包和本地 Maven 仓库缓存。
 
 ### 今日验证
 
 - 运行 `.\verify-project.cmd`，Java 打包、前端静态检查、静态页面访问、管理员登录、审计日志、区域增删改、电耗录入、表计新增、通用能源读数、汇总查询和登出流程全部通过。
+- 执行 `git status --short --ignored`，确认敏感配置和生成物只显示为 ignored，没有进入提交。
 
 ### 当前项目状态
 
