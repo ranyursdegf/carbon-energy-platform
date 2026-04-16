@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>双碳能源管理可视化平台</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="home-page">
+  <div class="page-shell">
+    <header class="panel platform-hero">
+      <button id="adminLoginButton" class="admin-login-button" type="button">管理员登录</button>
+      <div class="hero-copy-block">
+        <p class="eyebrow">Double Carbon Energy Platform</p>
+        <h1>双碳能源管理可视化平台</h1>
+        <div id="heroTags" class="tag-row"></div>
+      </div>
+      <div class="hero-side-card">
+        <span class="mini-label">当前概况</span>
+        <strong>能耗总览</strong>
+        <p>区域、用电与碳排指标会随最新记录更新。</p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">全局控制区</p>
+          <h2>统一筛选状态</h2>
+        </div>
+      </div>
+      <div id="globalControls" class="global-controls"></div>
+    </section>
+
+    <section class="home-overview-grid">
+      <article class="panel">
+        <p class="eyebrow">平台简介</p>
+        <h2>平台总览</h2>
+        <div id="selectionSummary" class="selection-banner"></div>
+      </article>
+
+      <article class="panel">
+        <p class="eyebrow">区域画像</p>
+        <h2>重点区域</h2>
+        <div id="officeSnapshot" class="snapshot-grid"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">总览概况</p>
+          <h2>年度概况</h2>
+        </div>
+      </div>
+      <div id="overviewStats" class="stats-grid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">业务导航</p>
+          <h2>选择业务主题</h2>
+        </div>
+      </div>
+      <a class="data-entry-link" href="./areas.html">
+        <strong>区域与用电数据</strong>
+        <span>进入</span>
+      </a>
+      <div id="moduleGroups" class="module-group-grid"></div>
+    </section>
+  </div>
+
+  <div id="adminLoginModal" class="modal-backdrop hidden" aria-hidden="true">
+    <form id="adminLoginForm" class="login-dialog">
+      <button id="adminLoginClose" class="modal-close" type="button" aria-label="关闭">×</button>
+      <p class="eyebrow">Admin</p>
+      <h2>管理员登录</h2>
+      <label class="field">
+        <span>账号</span>
+        <input name="username" autocomplete="username" required>
+      </label>
+      <label class="field">
+        <span>密码</span>
+        <input name="password" type="password" autocomplete="current-password" required>
+      </label>
+      <div class="form-actions">
+        <button class="primary-button" type="submit">登录</button>
+        <span id="adminLoginStatus" class="data-status"></span>
+      </div>
+    </form>
+  </div>
+
+  <script src="./app.js"></script>
+  <script src="./api.js"></script>
+  <script src="./home.js"></script>
+</body>
+</html>

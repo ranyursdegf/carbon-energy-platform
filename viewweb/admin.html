@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理中心</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="detail-page admin-page">
+  <div class="page-shell">
+    <header class="panel module-hero">
+      <div class="admin-topbar">
+        <a class="back-link" href="./index.html" aria-label="返回主页">
+          <span class="back-icon">←</span>
+          <span>返回主页</span>
+        </a>
+        <button id="logoutButton" class="secondary-button" type="button">退出登录</button>
+      </div>
+      <div class="module-hero-main">
+        <div>
+          <p class="eyebrow">Admin Console</p>
+          <h1>管理中心</h1>
+          <div class="tag-row">
+            <span class="tag">区域维护</span>
+            <span class="tag">用电录入</span>
+            <span class="tag">数据同步</span>
+          </div>
+        </div>
+        <div class="hero-side-card compact">
+          <span class="mini-label">当前账号</span>
+          <strong id="adminName">校验中</strong>
+          <p id="adminRoleText"></p>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">账号安全</p>
+          <h2>修改密码</h2>
+        </div>
+      </div>
+      <form id="passwordForm" class="data-form compact-form">
+        <label class="field">
+          <span>当前密码</span>
+          <input name="currentPassword" type="password" autocomplete="current-password" required>
+        </label>
+        <label class="field">
+          <span>新密码</span>
+          <input name="newPassword" type="password" autocomplete="new-password" minlength="6" required>
+        </label>
+        <label class="field">
+          <span>确认新密码</span>
+          <input name="confirmPassword" type="password" autocomplete="new-password" minlength="6" required>
+        </label>
+        <div class="form-actions">
+          <button class="secondary-button" type="submit">更新密码</button>
+          <span id="passwordStatus" class="data-status"></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">区域信息</p>
+          <h2 id="areaFormTitle">新增区域</h2>
+        </div>
+        <a class="secondary-button" href="./areas.html">查看区域数据</a>
+      </div>
+      <form id="areaForm" class="data-form">
+        <input name="areaId" type="hidden">
+        <label class="field">
+          <span>区域名称</span>
+          <input name="name" required placeholder="例如：A 座 3 层办公区">
+        </label>
+        <label class="field">
+          <span>区域编码</span>
+          <input name="code" required placeholder="例如：a3-office">
+        </label>
+        <label class="field">
+          <span>区域类型</span>
+          <select name="areaType">
+            <option value="office">办公室</option>
+            <option value="park">园区</option>
+            <option value="building">楼栋</option>
+            <option value="floor">楼层</option>
+            <option value="room">房间</option>
+            <option value="custom">自定义</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>建筑面积 m²</span>
+          <input name="floorAreaM2" type="number" min="0" step="0.01" value="0">
+        </label>
+        <label class="field">
+          <span>办公人数</span>
+          <input name="staffCount" type="number" min="0" step="1" value="0">
+        </label>
+        <label class="field">
+          <span>年度预算 kWh</span>
+          <input name="annualBudgetKwh" type="number" min="0" step="0.001">
+        </label>
+        <label class="field">
+          <span>电力排放因子 kg CO₂e/kWh</span>
+          <input name="gridEmissionFactor" type="number" min="0" step="0.0001" value="0.42">
+        </label>
+        <label class="field">
+          <span>备注</span>
+          <input name="note" placeholder="可选">
+        </label>
+        <div class="form-actions">
+          <button class="primary-button" type="submit">保存区域</button>
+          <button id="cancelAreaEdit" class="secondary-button hidden" type="button">取消编辑</button>
+          <button id="deactivateAreaButton" class="danger-button hidden" type="button">停用区域</button>
+          <span id="areaStatus" class="data-status"></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="workspace-two-col">
+      <article class="panel workspace-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">区域列表</p>
+            <h2>已建区域</h2>
+          </div>
+        </div>
+        <div id="areaList" class="area-list"></div>
+      </article>
+
+      <article class="panel workspace-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">用电数据</p>
+            <h2>录入电耗</h2>
+          </div>
+        </div>
+        <form id="readingForm" class="data-form compact-form">
+          <label class="field">
+            <span>选择区域</span>
+            <select id="readingAreaSelect" name="areaId" required></select>
+          </label>
+          <label class="field">
+            <span>统计口径</span>
+            <select name="periodType">
+              <option value="day">按日</option>
+              <option value="month">按月</option>
+              <option value="year">按年</option>
+              <option value="hour">按小时</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>统计时间</span>
+            <input name="readingTime" type="date" required>
+          </label>
+          <label class="field">
+            <span>电耗 kWh</span>
+            <input name="kwh" type="number" min="0" step="0.001" required>
+          </label>
+          <label class="field">
+            <span>记录方式</span>
+            <input name="source" value="手动记录">
+          </label>
+          <label class="field">
+            <span>备注</span>
+            <input name="note" placeholder="可选">
+          </label>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">保存电耗</button>
+            <span id="readingStatus" class="data-status"></span>
+          </div>
+        </form>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">区域概览</p>
+          <h2>区域数据状态</h2>
+        </div>
+      </div>
+      <div id="adminStats" class="stats-grid"></div>
+    </section>
+  </div>
+
+  <script src="./api.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

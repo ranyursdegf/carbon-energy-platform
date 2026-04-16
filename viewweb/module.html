@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>双碳能源管理分析</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="detail-page">
+  <div class="page-shell">
+    <header class="panel module-hero">
+      <a class="back-link" href="./index.html" aria-label="返回主页">
+        <span class="back-icon">←</span>
+        <span>返回主页</span>
+      </a>
+
+      <div class="module-hero-main">
+        <div>
+          <p id="moduleGroup" class="eyebrow"></p>
+          <h1 id="moduleTitle"></h1>
+          <div id="moduleTags" class="tag-row"></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">全局控制区</p>
+          <h2>统一筛选状态</h2>
+        </div>
+      </div>
+      <div id="globalControls" class="global-controls"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">业务切换</p>
+          <h2 id="groupTitle"></h2>
+        </div>
+      </div>
+      <div id="moduleSwitcher" class="module-switcher"></div>
+
+      <div class="analysis-controls">
+        <label id="yearField" class="field">
+          <span>年份</span>
+          <select id="yearSelect"></select>
+        </label>
+        <label id="monthField" class="field">
+          <span>月份</span>
+          <select id="monthSelect"></select>
+        </label>
+        <label id="dayField" class="field">
+          <span>日期</span>
+          <select id="daySelect"></select>
+        </label>
+        <div id="viewStateCard" class="control-static emphasis"></div>
+      </div>
+    </section>
+
+    <main id="moduleWorkspace" class="module-workspace"></main>
+  </div>
+
+  <script src="./app.js"></script>
+  <script src="./api.js"></script>
+  <script src="./module.js"></script>
+</body>
+</html>

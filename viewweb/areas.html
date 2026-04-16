@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>区域与用电数据</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="detail-page">
+  <div class="page-shell">
+    <header class="panel module-hero">
+      <a class="back-link" href="./index.html" aria-label="返回主页">
+        <span class="back-icon">←</span>
+        <span>返回主页</span>
+      </a>
+      <div class="module-hero-main">
+        <div>
+          <p class="eyebrow">Energy Data</p>
+          <h1>区域与用电数据</h1>
+          <div class="tag-row">
+            <span class="tag">区域管理</span>
+            <span class="tag">用电录入</span>
+            <span class="tag">数据联动</span>
+          </div>
+        </div>
+        <div class="hero-side-card compact">
+          <span class="mini-label">当前状态</span>
+          <strong id="apiBaseUrl"></strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">区域列表</p>
+          <h2>已建区域</h2>
+        </div>
+        <a class="secondary-button" href="./admin.html">管理员维护</a>
+      </div>
+      <div id="areaList" class="area-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">汇总查询</p>
+          <h2>区域用电汇总</h2>
+        </div>
+        <label class="field summary-filter">
+          <span>汇总方式</span>
+          <select id="summaryGroup">
+            <option value="month">按月</option>
+            <option value="day">按日</option>
+            <option value="year">按年</option>
+          </select>
+        </label>
+      </div>
+      <div id="summaryCards" class="stats-grid"></div>
+      <div id="summaryTable" class="table-shell data-table"></div>
+    </section>
+  </div>
+
+  <script src="./api.js"></script>
+  <script src="./areas.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "打开双碳网页",
+      "type": "msedge",
+      "request": "launch",
+      "file": "${workspaceFolder}/viewweb/index.html",
+      "webRoot": "${workspaceFolder}/viewweb"
+    }
+  ]
+}
