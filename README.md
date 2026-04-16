@@ -51,10 +51,11 @@ mysql -u root -p < database/seed.sql
 
 ## 3. 启动 Java 后端
 
-项目里已经带了便携版 JDK 17 和 Maven：
+本地开发可以使用项目内便携工具，也可以使用系统全局工具：
 
-- `tools/jdk17/`
-- `tools/maven/`
+- `tools/jdk17/`：可选，存在时启动脚本会优先使用。
+- `tools/maven/`：项目内 Maven，`mvnw.cmd` 会优先使用。
+- 如果从 Git 拉取项目后没有 `tools/jdk17/`，请在系统中安装 JDK 17，并确保 `java` 命令可用。
 
 可以直接运行：
 
@@ -66,10 +67,10 @@ run-java-backend.cmd
 
 ```bash
 mvnw.cmd -DskipTests package
-tools\jdk17\jdk-17.0.18+8\bin\java.exe -jar target\carbon-energy-platform-app.jar
+java -jar target\carbon-energy-platform-app.jar
 ```
 
-如果你以后想用系统全局 Java/Maven，也可以安装：
+如果你想完全使用系统全局 Java/Maven，也可以安装：
 
 - JDK 17
 - Maven 3.9+

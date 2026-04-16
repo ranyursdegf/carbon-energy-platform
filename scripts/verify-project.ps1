@@ -141,6 +141,20 @@ function Read-DotEnv {
   return $envMap
 }
 
+function Resolve-JavaCommand {
+  $portableJava = Join-Path $root "tools/jdk17/jdk-17.0.18+8/bin/java.exe"
+  if (Test-Path -LiteralPath $portableJava) {
+    return (Resolve-Path -LiteralPath $portableJava).Path
+  }
+
+  $systemJava = Get-Command java -ErrorAction SilentlyContinue
+  if ($systemJava) {
+    return $systemJava.Source
+  }
+
+  throw "Java 17 was not found. Install JDK 17 or restore tools/jdk17."
+}
+
 function Remove-SmokeData {
   param([string]$Code)
 
@@ -203,11 +217,8 @@ try {
     Invoke-Api "GET" "/api/health" | Out-Null
     Write-Host "[OK] Reusing existing backend at $BaseUrl"
   } catch {
-    $javaPath = Join-Path $root "tools/jdk17/jdk-17.0.18+8/bin/java.exe"
+    $javaPath = Resolve-JavaCommand
     $jarPath = Join-Path $root "target/carbon-energy-platform-app.jar"
-    if (-not (Test-Path -LiteralPath $javaPath)) {
-      throw "Portable Java not found: $javaPath"
-    }
     if (-not (Test-Path -LiteralPath $jarPath)) {
       throw "Application jar not found: $jarPath"
     }
