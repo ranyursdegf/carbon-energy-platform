@@ -172,6 +172,20 @@
             <span id="readingStatus" class="data-status"></span>
           </div>
         </form>
+
+        <div class="import-box">
+          <div>
+            <p class="eyebrow">批量导入</p>
+            <h3>导入电耗 CSV</h3>
+            <p>先选择区域，再导入包含 readingTime、kwh、periodType、source、note 的 CSV 文件。</p>
+          </div>
+          <div class="import-actions">
+            <input id="readingImportFile" type="file" accept=".csv,text/csv">
+            <button id="downloadReadingTemplate" class="secondary-button" type="button">下载模板</button>
+            <button id="importReadingButton" class="primary-button" type="button">导入数据</button>
+          </div>
+          <span id="importStatus" class="data-status"></span>
+        </div>
       </article>
     </section>
 

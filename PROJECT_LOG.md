@@ -353,12 +353,14 @@
 - 初始化本地 Git 仓库，补强 `.gitignore`，已排除 `.env`、`target/`、日志、便携 JDK、下载压缩包和本地 Maven 仓库缓存。
 - 改进 `mvnw.cmd`、`run-java-backend.cmd` 和验证脚本，支持“便携 JDK 优先、系统 Java 兜底”，方便 Git 拉取后运行。
 - 将首页和模块页“数据更新时间”改为按数据库中最新添加 / 更新的能源记录自动显示，不再使用页面刷新时间。
+- 管理员后台“录入电耗”增加 CSV 批量导入入口，复用后端批量读数写入能力，适合真实表格数据导入。
 
 ### 今日验证
 
 - 运行 `.\verify-project.cmd`，Java 打包、前端静态检查、静态页面访问、管理员登录、审计日志、区域增删改、电耗录入、表计新增、通用能源读数、汇总查询和登出流程全部通过。
 - 执行 `git status --short --ignored`，确认敏感配置和生成物只显示为 ignored，没有进入提交。
 - 数据更新时间改造后再次运行 `.\verify-project.cmd`，完整 API 冒烟流程通过。
+- CSV 导入入口改造后运行 `node .\scripts\frontend-check.js` 和 `.\mvnw.cmd -DskipTests compile`，均通过。
 
 ### 当前项目状态
 

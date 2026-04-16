@@ -354,6 +354,28 @@ try {
     "name=$($response.data.name), staff=$($response.data.staff_count)"
   }
 
+  Add-Step "POST /api/areas/{id}/electricity-readings batch" {
+    $response = Invoke-Api "POST" "/api/areas/$script:tempAreaId/electricity-readings" @{
+      readings = @(
+        @{
+          periodType = "day"
+          readingTime = "2025-01-13"
+          kwh = 16.25
+          source = "smoke-test-batch"
+          note = "smoke-test batch electricity reading 1"
+        },
+        @{
+          periodType = "day"
+          readingTime = "2025-01-14"
+          kwh = 17.50
+          source = "smoke-test-batch"
+          note = "smoke-test batch electricity reading 2"
+        }
+      )
+    } $script:tokenHeaders
+    "saved=$($response.data.savedCount)"
+  }
+
   Add-Step "POST /api/areas/{id}/electricity-readings" {
     $response = Invoke-Api "POST" "/api/areas/$script:tempAreaId/electricity-readings" @{
       periodType = "day"

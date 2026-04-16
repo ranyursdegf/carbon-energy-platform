@@ -24,6 +24,10 @@ const dom = {
   readingStatus: document.getElementById("readingStatus"),
   readingPeriodSelect: document.querySelector("#readingForm [name='periodType']"),
   readingTimeInput: document.querySelector("#readingForm [name='readingTime']"),
+  readingImportFile: document.getElementById("readingImportFile"),
+  downloadReadingTemplate: document.getElementById("downloadReadingTemplate"),
+  importReadingButton: document.getElementById("importReadingButton"),
+  importStatus: document.getElementById("importStatus"),
   adminStats: document.getElementById("adminStats")
 };
 
@@ -159,6 +163,9 @@ function bindEvents() {
   });
 
   dom.readingPeriodSelect.addEventListener("change", syncReadingTimeInput);
+
+  dom.downloadReadingTemplate.addEventListener("click", downloadReadingTemplate);
+  dom.importReadingButton.addEventListener("click", importReadingCsv);
 }
 
 async function ensureAdmin() {
@@ -301,6 +308,130 @@ function normalizeReadingTime(value, periodType) {
     return `${value.slice(0, 4)}-01-01`;
   }
   return value;
+}
+
+async function importReadingCsv() {
+  if (!dom.readingAreaSelect.value) {
+    setStatus(dom.importStatus, "请先选择区域", "danger");
+    return;
+  }
+  const file = dom.readingImportFile.files[0];
+  if (!file) {
+    setStatus(dom.importStatus, "请选择 CSV 文件", "danger");
+    return;
+  }
+
+  setStatus(dom.importStatus, "正在读取...");
+  try {
+    const text = await file.text();
+    const readings = parseReadingCsv(text);
+    if (readings.length === 0) {
+      setStatus(dom.importStatus, "文件里没有可导入的数据", "danger");
+      return;
+    }
+
+    setStatus(dom.importStatus, `正在导入 ${readings.length} 条...`);
+    await api.addElectricityReading(dom.readingAreaSelect.value, { readings });
+    dom.readingImportFile.value = "";
+    setStatus(dom.importStatus, `已导入 ${readings.length} 条`, "success");
+    await loadAreas();
+  } catch (error) {
+    setStatus(dom.importStatus, error.message, "danger");
+  }
+}
+
+function parseReadingCsv(text) {
+  const rows = parseCsvRows(text);
+  if (rows.length < 2) {
+    return [];
+  }
+  const headers = rows[0].map((item) => item.trim().replace(/^\uFEFF/, ""));
+  const headerMap = new Map(headers.map((header, index) => [header, index]));
+  const required = ["readingTime", "kwh"];
+  required.forEach((field) => {
+    if (!headerMap.has(field)) {
+      throw new Error(`CSV 缺少 ${field} 列`);
+    }
+  });
+
+  return rows.slice(1)
+    .filter((row) => row.some((cell) => cell.trim() !== ""))
+    .map((row, index) => {
+      const lineNumber = index + 2;
+      const periodType = getCsvValue(row, headerMap, "periodType") || dom.readingPeriodSelect.value || "day";
+      const readingTime = getCsvValue(row, headerMap, "readingTime");
+      const kwh = getCsvValue(row, headerMap, "kwh");
+      if (!readingTime || !kwh) {
+        throw new Error(`第 ${lineNumber} 行缺少 readingTime 或 kwh`);
+      }
+      if (Number(kwh) < 0 || Number.isNaN(Number(kwh))) {
+        throw new Error(`第 ${lineNumber} 行 kwh 不是有效数字`);
+      }
+      return {
+        periodType,
+        readingTime: normalizeReadingTime(readingTime, periodType),
+        kwh,
+        source: getCsvValue(row, headerMap, "source") || "CSV导入",
+        note: getCsvValue(row, headerMap, "note")
+      };
+    });
+}
+
+function getCsvValue(row, headerMap, key) {
+  if (!headerMap.has(key)) {
+    return "";
+  }
+  return (row[headerMap.get(key)] || "").trim();
+}
+
+function parseCsvRows(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let quoted = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const next = text[index + 1];
+    if (char === '"' && quoted && next === '"') {
+      cell += '"';
+      index += 1;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === "," && !quoted) {
+      row.push(cell);
+      cell = "";
+    } else if ((char === "\n" || char === "\r") && !quoted) {
+      if (char === "\r" && next === "\n") {
+        index += 1;
+      }
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += char;
+    }
+  }
+  if (cell !== "" || row.length > 0) {
+    row.push(cell);
+    rows.push(row);
+  }
+  return rows;
+}
+
+function downloadReadingTemplate() {
+  const content = [
+    "readingTime,kwh,periodType,source,note",
+    "2026-04-16,168.4,day,CSV导入,日用电",
+    "2026-04,4380,month,CSV导入,月度用电"
+  ].join("\n");
+  const blob = new Blob(["\uFEFF" + content], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "electricity-readings-template.csv";
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
 function syncReadingTimeInput() {

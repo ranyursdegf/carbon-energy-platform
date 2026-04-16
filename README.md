@@ -207,6 +207,16 @@ http://localhost:3000/api/health
 }
 ```
 
+后台也支持 CSV 批量导入电耗。进入 `admin.html`，在“录入电耗”区域先选择区域，再上传 CSV。文件列名为：
+
+```csv
+readingTime,kwh,periodType,source,note
+2026-04-16,168.4,day,CSV导入,日用电
+2026-04,4380,month,CSV导入,月度用电
+```
+
+其中 `readingTime` 和 `kwh` 必填；`periodType` 可填 `hour`、`day`、`month`、`year`，不填时按页面当前统计口径处理。
+
 录入通用能源数据：
 
 ```json

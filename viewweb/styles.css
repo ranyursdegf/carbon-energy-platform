@@ -1593,6 +1593,40 @@ select:focus {
   flex-wrap: wrap;
 }
 
+.import-box {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.import-box h3 {
+  margin: 4px 0 8px;
+  font-size: 1.1rem;
+}
+
+.import-box p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.import-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.import-actions input[type="file"] {
+  min-height: 42px;
+  max-width: 320px;
+  padding: 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: #fffefa;
+}
+
 .primary-button {
   min-height: 46px;
   padding: 0 18px;
