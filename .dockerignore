@@ -1,0 +1,8 @@
+.git
+.vscode
+.env
+target
+tools
+*.log
+java-server*.log
+verify-*.log

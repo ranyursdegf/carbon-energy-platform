@@ -354,6 +354,7 @@
 - 改进 `mvnw.cmd`、`run-java-backend.cmd` 和验证脚本，支持“便携 JDK 优先、系统 Java 兜底”，方便 Git 拉取后运行。
 - 将首页和模块页“数据更新时间”改为按数据库中最新添加 / 更新的能源记录自动显示，不再使用页面刷新时间。
 - 管理员后台“录入电耗”增加 CSV 批量导入入口，复用后端批量读数写入能力，适合真实表格数据导入。
+- 新增 Docker Compose 部署文件，支持在另一台电脑上一键启动 Java 后端和 MySQL，不影响原有本地脚本运行方式。
 
 ### 今日验证
 
@@ -361,6 +362,7 @@
 - 执行 `git status --short --ignored`，确认敏感配置和生成物只显示为 ignored，没有进入提交。
 - 数据更新时间改造后再次运行 `.\verify-project.cmd`，完整 API 冒烟流程通过。
 - CSV 导入入口改造后运行 `node .\scripts\frontend-check.js` 和 `.\mvnw.cmd -DskipTests compile`，均通过。
+- Docker 部署文件新增后运行 `node .\scripts\frontend-check.js` 和 `.\mvnw.cmd -DskipTests compile`，均通过；当前电脑未安装 Docker，暂未执行容器启动验证。
 
 ### 当前项目状态
 

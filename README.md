@@ -112,7 +112,57 @@ http://localhost:3000/api/health
 
 第一次部署后建议尽快把 `app_users.password_hash` 改成你自己的密码哈希。
 
-## 4. 当前接口
+## 4. Docker Compose 部署
+
+如果要把项目放到另一台电脑长期运行，可以在那台电脑安装 Docker Desktop，然后在项目根目录执行：
+
+```powershell
+docker compose up -d --build
+```
+
+启动后访问：
+
+```text
+http://localhost:3000
+```
+
+如果老师和这台电脑在同一个局域网，先在这台电脑上查 IPv4 地址：
+
+```powershell
+ipconfig
+```
+
+然后让老师访问：
+
+```text
+http://这台电脑的IPv4地址:3000
+```
+
+常用 Docker 命令：
+
+```powershell
+docker compose ps
+docker compose logs -f app
+docker compose restart app
+docker compose down
+```
+
+Docker 会同时启动：
+
+- `carbon-app`：Java 后端和前端页面。
+- `carbon-mysql`：MySQL 数据库。
+- `mysql-data`：数据库持久化数据卷。
+
+首次启动时，MySQL 会自动执行 `database/schema.sql` 和 `database/seed.sql`。如果你执行过一次后又想重置 Docker 数据库，可以运行：
+
+```powershell
+docker compose down -v
+docker compose up -d --build
+```
+
+注意：`docker compose down -v` 会删除 Docker 里的数据库数据，真实数据导入后不要随便执行。默认 Docker MySQL 密码是 `carbon_dev_password`，只适合演示环境；正式部署前请通过环境变量 `DOCKER_MYSQL_ROOT_PASSWORD` 改掉。
+
+## 5. 当前接口
 
 登录：
 
@@ -155,7 +205,7 @@ http://localhost:3000/api/health
 - `POST /api/energy-readings`：需要管理员 Bearer Token
 - `GET /api/energy-readings/summary?energyTypeCode=electricity&groupBy=month`
 
-## 5. 数据库结构
+## 6. 数据库结构
 
 已经创建的核心表：
 
@@ -171,7 +221,7 @@ http://localhost:3000/api/health
 - `audit_logs`：关键操作审计日志。
 - `alert_rules`：预警规则。
 
-## 6. 示例数据
+## 7. 示例数据
 
 现在模拟数据建议统一放在 `database/seed.sql` 里维护，前端不要再到处手写固定数字。
 
@@ -231,7 +281,7 @@ readingTime,kwh,periodType,source,note
 }
 ```
 
-## 7. 当前状态
+## 8. 当前状态
 
 - Java 后端已经是主后端。
 - MySQL 数据库已经初始化。
@@ -242,7 +292,7 @@ readingTime,kwh,periodType,source,note
 - `areas.html` 保留为区域与用电汇总查看页。
 - Node.js 原型后端和依赖已经清理，后续统一按 Java 后端继续扩展。
 
-## 8. 后端常驻说明
+## 9. 后端常驻说明
 
 开发阶段建议手动运行：
 
