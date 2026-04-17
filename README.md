@@ -38,6 +38,7 @@ DB_CONNECTION_LIMIT=10
 如果还没有建表，可以在 MySQL 客户端里执行：
 
 ```sql
+SET NAMES utf8mb4;
 source d:/碳排放/database/schema.sql;
 source d:/碳排放/database/seed.sql;
 ```
@@ -45,9 +46,12 @@ source d:/碳排放/database/seed.sql;
 如果你本机安装了 MySQL 命令行，也可以在项目根目录执行：
 
 ```bash
-mysql -u root -p < database/schema.sql
-mysql -u root -p < database/seed.sql
+mysql --default-character-set=utf8mb4 -u root -p < database/schema.sql
+mysql --default-character-set=utf8mb4 -u root -p < database/seed.sql
 ```
+
+如果页面只有数据库返回的区域名、能源名等中文乱码，通常是初始化数据曾经按 GBK/默认编码导入过。
+按上面的命令重新执行 `database/seed.sql` 可以刷新演示数据；Docker 部署想彻底重置演示库时，再使用 `docker compose down -v` 后重新 `docker compose up -d --build`。
 
 ## 3. 启动 Java 后端
 

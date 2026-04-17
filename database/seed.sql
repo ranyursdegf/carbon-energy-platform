@@ -1,3 +1,5 @@
+SET NAMES utf8mb4;
+
 USE carbon_emission;
 
 INSERT INTO organizations (code, name, contact_name, note)
